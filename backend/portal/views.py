@@ -3,7 +3,7 @@ from portal.models import Provider, Product
 from portal.serializers import ProviderSerializer, ProductSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import generics, status
 
 
 class ProviderDetail(APIView):
@@ -32,7 +32,7 @@ class ProviderDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductList(APIView):
+class ProductList_(APIView):
     """
         Product view to list and create the products
     """
@@ -47,6 +47,18 @@ class ProductList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProductList(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the products for
+        the provider as determined by the merchant_network_id.
+        """
+        merchant_network_id = self.kwargs['merchant_network_id']
+        return Product.objects.filter(provider__merchant_network_id=merchant_network_id)
 
 
 class ProductDetail(APIView):

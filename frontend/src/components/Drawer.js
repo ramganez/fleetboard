@@ -17,7 +17,7 @@ export default function DrawerComponent(props) {
 
   const handleListItemClick = (event, index) => {
     props.setSelectedMenu(index);
-    props.showAlert();
+    props.showBackdrop(true);
   };
 
   return (

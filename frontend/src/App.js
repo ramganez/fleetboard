@@ -32,7 +32,7 @@ function App() {
 
           </Toolbar>
         </AppBar> */}
-        <Drawer showAlert={showAlert} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+        <Drawer showAlert={showAlert} selectedMenu={selectedMenu} showBackdrop={showBackdrop} setSelectedMenu={setSelectedMenu} />
         <Box
           component="main"
           sx={{
