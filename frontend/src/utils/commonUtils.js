@@ -29,13 +29,32 @@ const INSTANCE_TYPE = {
 
 export const transformResponse = (data) => {
     // including only needed information from response data
-    const includeOnly = INSTANCE_TYPE[data.type];
-    let responseData = {}
-    for (let k in data) {
-        if (!(includeOnly.indexOf(k) < 0)) {
-            responseData[k] = data[k]
+    if (data.type !== undefined) {
+        const includeOnly = INSTANCE_TYPE[data.type];
+        let responseData = {}
+        for (let k in data) {
+            if (!(includeOnly.indexOf(k) < 0)) {
+                responseData[k] = data[k]
+            }
         }
+        return responseData;
     }
 
-    return responseData;
+    return data
+}
+
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+    return 0;
+}
+
+export const getComparator = (order, orderBy) => {
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
 }

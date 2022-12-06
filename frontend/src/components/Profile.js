@@ -5,8 +5,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 
 import { FIELDS } from '../config/formConfig'
@@ -53,13 +51,6 @@ export default function ProfileComponent(props) {
 
     return (
         <>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={props.backdrop}
-                invisible={false}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
             <Container maxWidth="lg" sx={{ mt: 4, mb: 2 }}>
                 <Paper
                     sx={{
