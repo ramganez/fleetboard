@@ -199,13 +199,26 @@ export default function TransactionComponent(props) {
     const emptyRows = 0;
 
     // ADD FLAG
+    const handleUpdatTransactionTable = (row) => {
+        const updatedRows = rows.map((r, i) => {
+            if (i === flagInput.index) {
+                // return updated row
+                return row;
+            } else {
+                // The rest haven't changed
+                return r;
+            }
+        });
+        setRows(updatedRows);
+    }
+
     const handleFlagSubmit = (event) => {
         event.preventDefault();
         props.showBackdrop(true);
         axios.patch(`/transaction-flag/${flagInput.id}/`, flagInput)
-        
+
             .then(function (response) {
-                // TODO update rows in table
+                handleUpdatTransactionTable(response.data);
                 handleFlagDialogClose();
                 props.showBackdrop(false);
                 props.showAlert();
@@ -215,9 +228,9 @@ export default function TransactionComponent(props) {
             });
     };
 
-    const handleFlagDialogOpen = (row) => {
+    const handleFlagDialogOpen = (row, index) => {
         setFlagDialogOpen(true);
-        setFlagInput({ ...flagInput, 'id': row.id });
+        setFlagInput({ ...flagInput, 'id': row.id, 'index': index});
     };
 
     const handleFlagDialogClose = () => {
@@ -283,7 +296,7 @@ export default function TransactionComponent(props) {
                                                         <TableCell align="left">{row.product_name}</TableCell>
 
                                                         <TableCell align="left">
-                                                            {!row.flag ? <Link onClick={() => handleFlagDialogOpen(row)} underline="hover"> SET FLAG </Link> : 'FLAGGED'}
+                                                            {!row.flag ? <Link onClick={() => handleFlagDialogOpen(row, index)} underline="hover"> SET FLAG </Link> : 'FLAGGED'}
                                                         </TableCell>
                                                     </TableRow>
                                                 );
