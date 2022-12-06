@@ -67,6 +67,7 @@ export default function ProfileComponent(props) {
                         display: 'flex',
                         flexDirection: 'column',
                         height: 'flex',
+                        width: 'flex',
                     }}
                 >
                     <Grid container spacing={2}>

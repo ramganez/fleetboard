@@ -12,7 +12,8 @@ export default function TransactionComponent() {
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            height: 540,
+                            width:'flex',
+                            height: 'flex',
                         }}
                     >
                         Txn
