@@ -6,6 +6,12 @@ PRODUCT_MODETYPE = [
     ('rideshare', 'RIDESHARE'),
     ('escootershare', 'ESCOOTERSHARE'),
     ('emopedshare', 'EMOPEDSHAR'),
+    ('EBIKE', 'EBIKE'),
+    ('ESCOOTER', 'ESCOOTER'),
+    ('EMOPED', 'EMOPED'),
+    ('RIDESHARE', 'RIDESHARE'),
+    ('ESCOOTERSHARE', 'ESCOOTERSHARE'),
+    ('EMOPEDSHARE', 'EMOPEDSHAR'),
 ]
 
 # LEASING | FLAT | TIME | DISTANCE
@@ -14,6 +20,10 @@ PRODUCT_PRICING_TYPE = [
     ('flat', 'FLAT'),
     ('time', 'TIME'),
     ('distance', 'DISTANCE'),
+    ('LEASING', 'LEASING'),
+    ('FLAT', 'FLAT'),
+    ('TIME', 'TIME'),
+    ('DISTANCE', 'DISTANCE'),    
 ]
 
 # MONTHLY | ONE-TIME | YEARLY | MINUTE | MILE  
