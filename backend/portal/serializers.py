@@ -23,4 +23,4 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_type(self, obj):
-        return 'PRODUT'
+        return 'PRODUCT'

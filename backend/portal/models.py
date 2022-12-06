@@ -24,7 +24,7 @@ class Product(models.Model):
     pricing_type = models.CharField(max_length=50, choices=PRODUCT_PRICING_TYPE)
     pricing_unit = models.CharField(max_length=50, choices=PRODUCT_PRICING_UNIT)
     pricing_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    product_image = models.ImageField(null=True)
+    product_image = models.URLField(null=True)
     product_description = models.CharField(max_length=500)
     metro_area = models.CharField(max_length=100)
     transaction_name = models.CharField(max_length=100)

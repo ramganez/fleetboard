@@ -8,7 +8,7 @@ from rest_framework import generics, status
 
 class ProviderDetail(APIView):
     """
-        ProviderDetails view to get and update the provider details
+    ProviderDetails view to get and update the provider details
     """
 
     def get_object(self, merchant_network_id):
@@ -32,23 +32,6 @@ class ProviderDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductList_(APIView):
-    """
-        Product view to list and create the products
-    """
-    def get(self, request, format=None):
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class ProductList(generics.ListAPIView):
     serializer_class = ProductSerializer
 
@@ -57,14 +40,15 @@ class ProductList(generics.ListAPIView):
         This view should return a list of all the products for
         the provider as determined by the merchant_network_id.
         """
-        merchant_network_id = self.kwargs['merchant_network_id']
+        merchant_network_id = self.kwargs["merchant_network_id"]
         return Product.objects.filter(provider__merchant_network_id=merchant_network_id)
 
 
 class ProductDetail(APIView):
     """
-        ProductDetails view to get, update and delete the product details
+    ProductDetails view to get, update and delete the product details
     """
+
     def get_object(self, pk):
         product = Product.objects.get(pk=pk)
         return product
@@ -75,7 +59,7 @@ class ProductDetail(APIView):
             serializer = ProductSerializer(product)
             return Response(serializer.data)
         except Product.DoesNotExist:
-            return HttpResponse('Data not found', status=404)
+            return HttpResponse("Data not found", status=404)
 
     def patch(self, request, pk, format=None):
         product = self.get_object(pk)
@@ -89,4 +73,3 @@ class ProductDetail(APIView):
         product = self.get_object(pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-        
