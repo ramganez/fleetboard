@@ -72,7 +72,7 @@ export const transactionColumns = [
         id: 'created_at',
         numeric: false,
         disablePadding: true,
-        label: 'Create at',
+        label: 'Created at',
     },
     {
         id: 'status',

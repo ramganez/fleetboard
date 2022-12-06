@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 
 from django.conf import settings
 
@@ -70,12 +71,15 @@ def save_txn_data():
             
             # create txn objs
             txn_data = {k: v for k, v in row.items() if k in TXN_COL}
-            print(txn_data)
+            # print(txn_data)
             txn_data['provider'] = Provider.objects.get(merchant_network_id=txn_data['merchant_network_id'])
             txn_data['product'] = Product.objects.get(transaction_name=txn_data['transaction_name'])
+            from django.utils.timezone import utc, make_aware
+            txn_data['created_at'] =  make_aware(datetime.fromisoformat(txn_data['created_at']), timezone=utc)
             del txn_data['merchant_network_id']
             del txn_data['name']
             del txn_data['transaction_name']
+            print(txn_data)
             try:
                 txn_obj = Transaction.objects.get(**txn_data)
             except Transaction.DoesNotExist:

@@ -26,6 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name')
+    created_at = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S", required=False, read_only=True)
 
     class Meta:
         model = Transaction
