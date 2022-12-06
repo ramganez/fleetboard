@@ -66,3 +66,48 @@ export const productColumns = [
         label: 'Action',
     },
 ];
+
+export const transactionColumns = [
+    {
+        id: 'created_at',
+        numeric: false,
+        disablePadding: true,
+        label: 'Create at',
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: true,
+        label: 'Status',
+    },
+    {
+        id: 'total_amount',
+        numeric: false,
+        disablePadding: true,
+        label: 'Total Amount',
+    },
+    {
+        id: 'discount_amount',
+        numeric: false,
+        disablePadding: true,
+        label: 'Discount Amount',
+    },
+    {
+        id: 'discount_percentage',
+        numeric: false,
+        disablePadding: true,
+        label: 'Discount %',
+    },
+    {
+        id: 'product_name',
+        numeric: false,
+        disablePadding: true,
+        label: 'Product',
+    },
+    {
+        id: 'flag',
+        numeric: false,
+        disablePadding: true,
+        label: 'Flag',
+    },
+]

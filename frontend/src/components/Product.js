@@ -94,7 +94,7 @@ function EnhancedTableToolbar(props) {
                 id="tableTitle"
                 component="div"
             >
-                Product
+                Products
             </Typography>
 
             <Tooltip onClick={props.handleAddDialogOpen} title="Add Product">
@@ -312,7 +312,7 @@ return (
                                             const labelId = `enhanced-table-checkbox-${index}`;
 
                                             return (
-                                                <TableRow key={row.name}>
+                                                <TableRow key={index}>
                                                     <TableCell
                                                         id={labelId}
                                                         // scope="row"
