@@ -12,6 +12,7 @@ const INSTANCE_TYPE = {
         'merchant_category',
     ],
     PRODUCT: [
+        'id',
         'name',
         'mode_type',
         'pricing_type',
@@ -23,7 +24,6 @@ const INSTANCE_TYPE = {
         'transaction_name',
         'discount_amount',
         'discount_description',
-        'provider',
     ]
 }
 

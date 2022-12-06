@@ -134,6 +134,83 @@ const fields = {
     },
   },
   PRODUCT: {
+    name: {
+      name:'name',
+      value: '',
+      displayName: 'Name',
+      type: 'text',
+      required: true,
+    }, 
+    mode_type: {
+      name:'mode_type',
+      value: '',
+      displayName: 'Mode Type',
+      type: 'text',
+      required: true,
+    }, 
+    pricing_type: {
+      name:'pricing_type',
+      value: '',
+      displayName: 'Pricing Type',
+      type: 'text',
+      required: true,
+    }, 
+    pricing_unit: {
+      name:'pricing_unit',
+      value: '',
+      displayName: 'pricing_unit',
+      type: 'text',
+      required: true,
+    }, 
+    pricing_amount: {
+      name:'pricing_amount',
+      value: '',
+      displayName: 'Pricing Amount',
+      type: 'text',
+      required: true,
+    }, 
+    product_image: {
+      name:'product_image',
+      value: '',
+      displayName: 'Product Image',
+      type: 'text',
+      required: false,
+    }, 
+    product_description: {
+      name:'product_description',
+      value: '',
+      displayName: 'Product Description',
+      type: 'text',
+      required: true,
+    }, 
+    metro_area: {
+      name:'metro_area',
+      value: '',
+      displayName: 'Metro Area',
+      type: 'text',
+      required: true,
+    }, 
+    transaction_name: {
+      name:'transaction_name',
+      value: '',
+      displayName: 'Transaction Name',
+      type: 'text',
+      required: true,
+    }, 
+    discount_amount: {
+      name:'discount_amount',
+      value: '',
+      displayName: 'Discount Amount',
+      type: 'text',
+      required: true,
+    }, 
+    discount_description: {
+      name:'discount_description',
+      value: '',
+      displayName: 'Discount Description',
+      type: 'text',
+      required: true,
+    }
   }
 }
 

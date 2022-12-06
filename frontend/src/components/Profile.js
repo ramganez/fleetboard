@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -5,7 +6,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import { useState, useEffect } from 'react';
 
 import { FIELDS } from '../config/formConfig'
 import axios from '../config/axisConfig';
@@ -30,7 +30,7 @@ export default function ProfileComponent(props) {
     const setStateToInitialState = () => {
         setInputs(initialState);
     };
-
+    
     useEffect(() => {
         // Make a request for a user with a given ID
         axios.get('/provider/000445266622999/')

@@ -9,7 +9,7 @@ export const productColumns = [
         id: 'mode_type',
         numeric: false,
         disablePadding: true,
-        label: 'Mode Type',
+        label: 'Mode',
     },
     {
         id: 'pricing_type',
@@ -58,5 +58,11 @@ export const productColumns = [
         numeric: false,
         disablePadding: true,
         label: 'Discount Description',
+    },
+    {
+        id: 'action',
+        numeric: false,
+        disablePadding: true,
+        label: 'Action',
     },
 ];
