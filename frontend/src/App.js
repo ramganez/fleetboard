@@ -1,6 +1,8 @@
 import './App.css';
 
 import { useState } from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Box from '@mui/material/Box';
 import Drawer from './components/Drawer';
@@ -10,7 +12,7 @@ import Profile from './components/Profile';
 
 function App() {
   // state for controling global menu navigation 
-  const [selectedMenu, setSelectedMenu] = useState(2); 
+  const [selectedMenu, setSelectedMenu] = useState(2);
   // state for controling global backdrop 
   const [backdrop, setBackdrop] = useState(true);
   // state for controling global alert 
@@ -45,9 +47,16 @@ function App() {
             overflow: 'auto',
           }}
         >
-          {selectedMenu === 0 && <Transaction />}
-          {selectedMenu === 1 && <Product />}
-          {selectedMenu === 2 && <Profile backdrop={backdrop} showBackdrop={showBackdrop} showAlert={showAlert} />}
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={backdrop}
+            invisible={false}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+          {selectedMenu === 0 && <Transaction showBackdrop={showBackdrop} showAlert={showAlert} />}
+          {selectedMenu === 1 && <Product showBackdrop={showBackdrop} showAlert={showAlert} />}
+          {selectedMenu === 2 && <Profile showBackdrop={showBackdrop} showAlert={showAlert} />}
         </Box>
       </Box>
     </div>
