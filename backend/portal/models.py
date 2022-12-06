@@ -34,6 +34,7 @@ class Product(models.Model):
 
     class Meta:
         unique_together = ['name', 'transaction_name']
+        ordering = ['-id']
 
 class Transaction(models.Model):
     """ Transation details

@@ -29,12 +29,12 @@ export const productColumns = [
         disablePadding: true,
         label: 'Amount',
     },
-    {
-        id: 'product_description',
-        numeric: false,
-        disablePadding: true,
-        label: 'Description',
-    },
+    // {
+    //     id: 'product_description',
+    //     numeric: false,
+    //     disablePadding: true,
+    //     label: 'Description',
+    // },
     {
         id: 'metro_area',
         numeric: false,
@@ -53,12 +53,12 @@ export const productColumns = [
         disablePadding: true,
         label: 'Discount',
     },
-    {
-        id: 'discount_description',
-        numeric: false,
-        disablePadding: true,
-        label: 'Discount Description',
-    },
+    // {
+    //     id: 'discount_description',
+    //     numeric: false,
+    //     disablePadding: true,
+    //     label: 'Discount Description',
+    // },
     {
         id: 'action',
         numeric: false,

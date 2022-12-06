@@ -15,9 +15,8 @@ class ProviderSerializer(serializers.ModelSerializer):
         return 'PROFILE'
 
 class ProductSerializer(serializers.ModelSerializer):
-    # transactions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     type = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Product
         fields = "__all__"

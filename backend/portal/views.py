@@ -32,7 +32,7 @@ class ProviderDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductList(generics.ListAPIView):
+class ProductList(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
@@ -43,6 +43,13 @@ class ProductList(generics.ListAPIView):
         merchant_network_id = self.kwargs["merchant_network_id"]
         return Product.objects.filter(provider__merchant_network_id=merchant_network_id)
 
+    def post(self, request, *args, **kwargs):
+        """
+        This view will accept new Product and return a list of all the products for
+        the provider as determined by the merchant_network_id.
+        """
+        self.create(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
 
 class ProductDetail(APIView):
     """

@@ -27,6 +27,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import axios from '../config/axisConfig';
 import UpdateProduct from './UpdateProduct';
+import AddProduct from './AddProduct';
 
 import { getComparator } from '../utils/commonUtils'
 import { productColumns } from '../config/tableConfig'
@@ -74,7 +75,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar(props) {
 
     return (
         <Toolbar
@@ -96,7 +97,7 @@ function EnhancedTableToolbar() {
                 Product
             </Typography>
 
-            <Tooltip title="Add Product">
+            <Tooltip onClick={props.handleAddDialogOpen} title="Add Product">
                 <IconButton>
                     <AddIcon fontSize='large' />
                 </IconButton>
@@ -151,9 +152,13 @@ export default function ProductComponent(props) {
     const [prevPage, setPrevPage] = useState();
 
     // UPDATE PRODUCT STATE
-    const [rowUpdate, setRowUpdate] = useState([]);
+    const [rowUpdate, setRowUpdate] = useState({});
     const [rowIndex, setRowIndex] = useState();
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+
+    // NEW PRODUCT STATE
+    const [rowAdd, setRowrowAdd] = useState({});
+    const [addDialogOpen, setAddDialogOpen] = useState(false);
 
     const getProducts = (endPoint) => {
         axios.get(endPoint)
@@ -203,7 +208,6 @@ export default function ProductComponent(props) {
     const handleUpdateDialogOpen = (row, index) => {
         setRowIndex(index);
         setRowUpdate(row);
-        setRowUpdate(row);
         setUpdateDialogOpen(true);
     };
 
@@ -229,7 +233,6 @@ export default function ProductComponent(props) {
     };
 
     // DELETE PRODUCT HANDLER
-
     const handleUpdateTableOnDeleteRow = (row, index) => {
         const newRows = rows.map(a => Object.assign({}, a));
         newRows.splice(index, 1);
@@ -251,7 +254,29 @@ export default function ProductComponent(props) {
             .then(function () {
                 // always executed
             });
-};
+    };
+
+    // ADD PRODUCT HANDLER
+    const handleAddDialogOpen = () => {
+        setAddDialogOpen(true);
+    };
+    const handleAddDialogClose = () => {
+        setAddDialogOpen(false);
+    };
+    const handleAddSubmit = (data) => {
+        props.showBackdrop(true);
+        data['provider'] = 1; // TODO to setup provider id 
+        axios.post(`/products/000445266622999/`, data)
+            .then(function (response) {
+                setRows(response.data.results);                
+                handleAddDialogClose();
+                props.showBackdrop(false);
+                props.showAlert();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
 
 return (
@@ -268,7 +293,7 @@ return (
                             width: 'flex',
                         }}
                     >
-                        <EnhancedTableToolbar />
+                        <EnhancedTableToolbar handleAddDialogOpen={handleAddDialogOpen} />
 
                         <TableContainer>
                             <Table
@@ -299,11 +324,11 @@ return (
                                                     <TableCell align="left">{row.pricing_type}</TableCell>
                                                     <TableCell align="left">{row.pricing_unit}</TableCell>
                                                     <TableCell align="left">{row.pricing_amount}</TableCell>
-                                                    <TableCell align="center">...</TableCell>
+                                                    {/* <TableCell align="center">...</TableCell> */}
                                                     <TableCell align="left">{row.metro_area}</TableCell>
                                                     <TableCell align="left">{row.transaction_name}</TableCell>
                                                     <TableCell align="left">{row.discount_amount}</TableCell>
-                                                    <TableCell align="center">...</TableCell>
+                                                    {/* <TableCell align="center">...</TableCell> */}
                                                     <TableCell align="left">
                                                         <ToggleButtonGroup size='small'>
                                                             <ToggleButton onClick={() => handleUpdateDialogOpen(row, index)} value="left" aria-label="left aligned">
@@ -343,6 +368,11 @@ return (
             showBackdrop={props.showBackdrop}
             showAlert={props.showAlert}>
         </UpdateProduct>
+        <AddProduct
+            addDialogOpen={addDialogOpen}
+            handleAddDialogClose={handleAddDialogClose}
+            handleAddSubmit={handleAddSubmit}>
+        </AddProduct>
     </>
 );
 }
