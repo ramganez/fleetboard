@@ -1,5 +1,6 @@
 const INSTANCE_TYPE = {
     PROFILE: [
+        'id',
         'name',
         'email',
         'website_url',

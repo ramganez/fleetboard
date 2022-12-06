@@ -21,8 +21,9 @@ import axios from '../src/config/axisConfig';
 function App() {
   // global merchant_id state 
   const [merchantId, setMerchantId] = useState();
+  const [merchantPk, setMerchantPk] = useState();
   // state for controling global menu navigation 
-  const [selectedMenu, setSelectedMenu] = useState(2);
+  const [selectedMenu, setSelectedMenu] = useState(0);
   // state for controling global backdrop 
   const [backdrop, setBackdrop] = useState(true);
   // state for controling global alert 
@@ -37,8 +38,8 @@ function App() {
     showBackdrop(true);
     axios.get(`/provider/${input}/`)
       .then(function (response) {
-        console.log(response.data.merchant_network_id);
         setMerchantId(response.data.merchant_network_id);
+        setMerchantPk(response.data.id);
         setLoginDialogOpen(false);
         showBackdrop(false);
         showAlert();
@@ -90,7 +91,7 @@ function App() {
             <CircularProgress color="inherit" />
           </Backdrop>
           {merchantId && selectedMenu === 0 && <Transaction merchantId={merchantId} showBackdrop={showBackdrop} showAlert={showAlert} />}
-          {merchantId && selectedMenu === 1 && <Product merchantId={merchantId} showBackdrop={showBackdrop} showAlert={showAlert} />}
+          {merchantId && selectedMenu === 1 && <Product merchantId={merchantId} merchantPk={merchantPk} showBackdrop={showBackdrop} showAlert={showAlert} />}
           {merchantId && selectedMenu === 2 && <Profile merchantId={merchantId} showBackdrop={showBackdrop} showAlert={showAlert} />}
         </Box>
       </Box>
@@ -122,7 +123,7 @@ function App() {
               autoFocus={true}
               style={{ 'color': '#646464', 'borderColor': '#646464', 'backgroundColor': 'transparent' }}
             >
-              Save
+              Submit
             </Button>
           </DialogActions>
         </form>

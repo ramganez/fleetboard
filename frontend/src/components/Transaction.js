@@ -21,9 +21,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Tooltip from '@mui/material/Tooltip';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Link from '@mui/material/Link';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 import axios from '../config/axisConfig';
 
@@ -144,6 +147,8 @@ export default function TransactionComponent(props) {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [rows, setRows] = useState([]);
+    const [flagInput, setFlagInput] = useState({});
+    const [flagDialogOpen, setFlagDialogOpen] = useState(false);
 
     // PAGINATION STATE
     const [nextPage, setNextPage] = useState();
@@ -193,85 +198,151 @@ export default function TransactionComponent(props) {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = 0;
 
+    // ADD FLAG
+    const handleFlagSubmit = (event) => {
+        event.preventDefault();
+        props.showBackdrop(true);
+        axios.patch(`/transaction-flag/${flagInput.id}/`, flagInput)
+        
+            .then(function (response) {
+                // TODO update rows in table
+                handleFlagDialogClose();
+                props.showBackdrop(false);
+                props.showAlert();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
+
+    const handleFlagDialogOpen = (row) => {
+        setFlagDialogOpen(true);
+        setFlagInput({ ...flagInput, 'id': row.id });
+    };
+
+    const handleFlagDialogClose = () => {
+        setFlagDialogOpen(false);
+    };
+
+    const handleFlagInputChange = (event) => {
+        const value = event.target.value;
+        setFlagInput({ ...flagInput, 'flag': value });
+        console.log(flagInput);
+    }
+
+    // FILTER 
     const handleFilterDialogOpen = () => {
-        // setAddDialogOpen(true);
-    };
-    const handleFilterDialogClose = () => {
-        // setAddDialogOpen(false);
 
+    }
 
-    };
+    return (
+        <>
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Grid container spacing={4}>
+                    <Grid item xs={12} md={8} lg={12}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 'flex',
+                                width: 'flex',
+                            }}
+                        >
+                            <EnhancedTableToolbar handleFilterDialogOpen={handleFilterDialogOpen} />
 
-return (
-    <>
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={4}>
-                <Grid item xs={12} md={8} lg={12}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: 'flex',
-                            width: 'flex',
-                        }}
-                    >
-                        <EnhancedTableToolbar handleFilterDialogOpen={handleFilterDialogOpen} />
+                            <TableContainer>
+                                <Table
+                                    sx={{ minWidth: 750 }}
+                                    aria-labelledby="tableTitle"
+                                    size={'medium'}
+                                >
+                                    <EnhancedTableHead
+                                        order={order}
+                                        orderBy={orderBy}
+                                        onRequestSort={handleRequestSort}
+                                    />
+                                    <TableBody>
+                                        {rows.sort(getComparator(order, orderBy)).slice()
+                                            .map((row, index) => {
+                                                const labelId = `enhanced-table-checkbox-${index}`;
 
-                        <TableContainer>
-                            <Table
-                                sx={{ minWidth: 750 }}
-                                aria-labelledby="tableTitle"
-                                size={'medium'}
-                            >
-                                <EnhancedTableHead
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onRequestSort={handleRequestSort}
-                                />
-                                <TableBody>
-                                    {rows.sort(getComparator(order, orderBy)).slice()
-                                        .map((row, index) => {
-                                            const labelId = `enhanced-table-checkbox-${index}`;
+                                                return (
+                                                    <TableRow key={index}>
+                                                        <TableCell
+                                                            id={labelId}
+                                                            // scope="row"
+                                                            padding="none"
+                                                        >
+                                                            {row.created_at}
+                                                        </TableCell>
+                                                        <TableCell align="left">{row.status}</TableCell>
+                                                        <TableCell align="left">{row.total_amount}</TableCell>
+                                                        <TableCell align="left">{row.discount_amount}</TableCell>
+                                                        <TableCell align="left">{row.discount_percentage}</TableCell>
+                                                        <TableCell align="left">{row.product_name}</TableCell>
 
-                                            return (
-                                                <TableRow key={index}>
-                                                    <TableCell
-                                                        id={labelId}
-                                                        // scope="row"
-                                                        padding="none"
-                                                    >
-                                                        {row.created_at}
-                                                    </TableCell>
-                                                    <TableCell align="left">{row.status}</TableCell>
-                                                    <TableCell align="left">{row.total_amount}</TableCell>
-                                                    <TableCell align="left">{row.discount_amount}</TableCell>
-                                                    <TableCell align="left">{row.discount_percentage}</TableCell>
-                                                    <TableCell align="left">{row.product_name}</TableCell>
-
-                                                    <TableCell align="left">
-                                                        {!row.flag ? <Link href="#" underline="hover"> SET FLAG </Link> : 'FLAGGED'}
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
-                                    {emptyRows > 0 && (
-                                        <TableRow
-                                            style={{
-                                                height: (53) * emptyRows,
-                                            }}
-                                        >
-                                            <TableCell colSpan={6} />
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination nextPage={nextPage} prevPage={prevPage} handleNextClick={handleNextClick} handlePrevClick={handlePrevClick} />
-                    </Paper>
+                                                        <TableCell align="left">
+                                                            {!row.flag ? <Link onClick={() => handleFlagDialogOpen(row)} underline="hover"> SET FLAG </Link> : 'FLAGGED'}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        {emptyRows > 0 && (
+                                            <TableRow
+                                                style={{
+                                                    height: (53) * emptyRows,
+                                                }}
+                                            >
+                                                <TableCell colSpan={6} />
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <TablePagination nextPage={nextPage} prevPage={prevPage} handleNextClick={handleNextClick} handlePrevClick={handlePrevClick} />
+                        </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Container>
-    </>
-);
+            </Container>
+
+            <Dialog open={flagDialogOpen}>
+                <form onSubmit={handleFlagSubmit}>
+                    <DialogTitle id="responsive-dialog-title">
+                        Add Flag
+                    </DialogTitle>
+                    <DialogContent>
+                        <Box component="span" sx={{
+                            '& .MuiTextField-root': { m: 1, width: '28ch' },
+                        }}>
+                            <div>
+                                <TextField
+                                    onChange={handleFlagInputChange}
+                                    value={flagInput.flag}
+                                    name="flag"
+                                    label="Flag"
+                                    required={true} helperText="" />
+                            </div>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleFlagDialogClose}
+                            style={{ 'color': '#646464', 'borderColor': '#646464', 'backgroundColor': 'transparent' }}
+                        >
+                            Cancle
+                        </Button>
+                        <Button
+                            type="submit"
+                            value="Submit"
+                            autoFocus={true}
+                            style={{ 'color': '#646464', 'borderColor': '#646464', 'backgroundColor': 'transparent' }}
+                        >
+                            Save
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+        </>
+    );
 }

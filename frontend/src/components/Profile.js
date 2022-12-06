@@ -76,7 +76,7 @@ export default function ProfileComponent(props) {
                     <List>
                         {Object.keys(inputs).map((text, index) => (
                             <ListItem key={index}>
-                                <ListItemText primary={PROFILE_FIELDS[text].displayName} secondary={inputs[text]} />
+                                {PROFILE_FIELDS[text] && <ListItemText primary={PROFILE_FIELDS[text].displayName} secondary={inputs[text]} /> }
                             </ListItem>
                         ))}
                     </List>

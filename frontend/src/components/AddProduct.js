@@ -33,7 +33,7 @@ export default function AddProduct(props) {
         >
             <form onSubmit={handleSubmit}>
                 <DialogTitle id="responsive-dialog-title">
-                    Update Profile
+                    Add Product
                 </DialogTitle>
                 <DialogContent>
                     <Box component="span" sx={{

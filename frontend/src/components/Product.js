@@ -265,7 +265,7 @@ export default function ProductComponent(props) {
     };
     const handleAddSubmit = (data) => {
         props.showBackdrop(true);
-        data['provider'] = 1; // TODO to setup provider id 
+        data['provider'] = props.merchantPk;
         axios.post(`/products/${props.merchantId}/`, data)
             .then(function (response) {
                 setRows(response.data.results);                

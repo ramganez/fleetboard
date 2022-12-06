@@ -56,7 +56,7 @@ export default function UpdateProfile(props) {
           }}>
             <div>
               {Object.keys(props.inputs).map((field, index) => (
-                <TextField
+                PROFILE_FIELDS[field] && <TextField
                   onChange={handleInputChange}
                   key={index}
                   value={props.inputs[field]}

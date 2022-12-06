@@ -1,6 +1,10 @@
 from django.http import HttpResponse
 from portal.models import Provider, Product, Transaction
-from portal.serializers import ProviderSerializer, ProductSerializer, TransactionSerializer
+from portal.serializers import (
+    ProviderSerializer,
+    ProductSerializer,
+    TransactionSerializer,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, status
@@ -51,6 +55,7 @@ class ProductList(generics.ListCreateAPIView):
         self.create(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
 
+
 class ProductDetail(APIView):
     """
     ProductDetails view to get, update and delete the product details
@@ -81,6 +86,7 @@ class ProductDetail(APIView):
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class TransactionList(generics.ListCreateAPIView):
     serializer_class = TransactionSerializer
 
@@ -90,5 +96,24 @@ class TransactionList(generics.ListCreateAPIView):
         the provider as determined by the merchant_network_id.
         """
         merchant_network_id = self.kwargs["merchant_network_id"]
-        return Transaction.objects.filter(provider__merchant_network_id=merchant_network_id)
+        return Transaction.objects.filter(
+            provider__merchant_network_id=merchant_network_id
+        )
 
+
+class TransactionFlagDetail(APIView):
+    """
+    View to set flag to the transaction
+    """
+
+    def get_object(self, pk):
+        provider = Transaction.objects.get(id=pk)
+        return provider
+
+    def patch(self, request, pk, format=None):
+        transaction = self.get_object(pk)
+        serializer = TransactionSerializer(transaction, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
