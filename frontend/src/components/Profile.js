@@ -33,7 +33,7 @@ export default function ProfileComponent(props) {
     
     useEffect(() => {
         // Make a request for a user with a given ID
-        axios.get('/provider/000445266622999/')
+        axios.get(`/provider/${props.merchantId}/`)
             .then(function (response) {
                 // handle success
                 setInputs(response.data);
@@ -90,6 +90,7 @@ export default function ProfileComponent(props) {
                 showBackdrop={props.showBackdrop}
                 showAlert={props.showAlert}
                 setInputs={setInputs}
+                merchantId={props.merchantId}
             />
         </>
     );

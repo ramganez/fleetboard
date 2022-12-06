@@ -10,6 +10,7 @@ const INSTANCE_TYPE = {
         'setup_instructions',
         'provider_support',
         'merchant_category',
+        'merchant_network_id',
     ],
     PRODUCT: [
         'id',

@@ -16,7 +16,7 @@ export default function UpdateProfile(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     props.showBackdrop(true);
-    axios.patch('/provider/000445266622999/', props.inputs)
+    axios.patch(`/provider/${props.merchantId}/`, props.inputs)
       .then(function (response) {
         props.setInputs(response.data);
         props.handleDialogClose();
@@ -62,6 +62,7 @@ export default function UpdateProfile(props) {
                   value={props.inputs[field]}
                   name={PROFILE_FIELDS[field].name}
                   label={PROFILE_FIELDS[field].displayName}
+                  disabled={PROFILE_FIELDS[field].disabled}
                   required={PROFILE_FIELDS[field].required} helperText="" />
               ))}
             </div>

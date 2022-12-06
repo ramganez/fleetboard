@@ -180,19 +180,19 @@ export default function ProductComponent(props) {
 
     useEffect(() => {
         // Make a request to get list of products for the merchant
-        getProducts('/products/000445266622999/');
+        getProducts(`/products/${props.merchantId}/`);
     }, [])
 
     const handleNextClick = () => {
         props.showBackdrop(true);
         let queryParams = nextPage.split("/").pop();
-        getProducts('/products/000445266622999/' + queryParams);
+        getProducts(`/products/${props.merchantId}/` + queryParams);
     }
 
     const handlePrevClick = () => {
         props.showBackdrop(true);
         let queryParams = prevPage.split("/").pop();
-        getProducts('/products/000445266622999/' + queryParams);
+        getProducts(`/products/${props.merchantId}/` + queryParams);
     }
 
     const handleRequestSort = (event, property) => {
@@ -266,7 +266,7 @@ export default function ProductComponent(props) {
     const handleAddSubmit = (data) => {
         props.showBackdrop(true);
         data['provider'] = 1; // TODO to setup provider id 
-        axios.post(`/products/000445266622999/`, data)
+        axios.post(`/products/${props.merchantId}/`, data)
             .then(function (response) {
                 setRows(response.data.results);                
                 handleAddDialogClose();

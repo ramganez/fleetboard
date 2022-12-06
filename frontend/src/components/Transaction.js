@@ -169,19 +169,19 @@ export default function TransactionComponent(props) {
 
     useEffect(() => {
         // Make a request to get list of transactions for the merchant
-        getTransactions('/transactions/000445266622999/');
+        getTransactions(`/transactions/${props.merchantId}/`);
     }, [])
 
     const handleNextClick = () => {
         props.showBackdrop(true);
         let queryParams = nextPage.split("/").pop();
-        getTransactions('/transactions/000445266622999/' + queryParams);
+        getTransactions(`/transactions/${props.merchantId}/` + queryParams);
     }
 
     const handlePrevClick = () => {
         props.showBackdrop(true);
         let queryParams = prevPage.split("/").pop();
-        getTransactions('/transactions/000445266622999/' + queryParams);
+        getTransactions(`/transactions/${props.merchantId}/` + queryParams);
     }
 
     const handleRequestSort = (event, property) => {

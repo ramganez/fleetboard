@@ -132,6 +132,21 @@ const fields = {
         regex: 'Please enter a valid Merchant Category.'
       }
     },
+    merchant_network_id: {
+      name: 'merchant_network_id',
+      value: '',
+      displayName: 'Merchant Network Id',
+      type: 'text',
+      required: true,
+      autoFocus: false,
+      disabled: true,
+      placeholder: 'your-email@domain.com',
+      regex: '', // TODO
+      msg: {
+        required: 'Please enter a valid email address.',
+        regex: 'Please enter a valid email address.',
+      },
+    },    
   },
   PRODUCT: {
     name: {
