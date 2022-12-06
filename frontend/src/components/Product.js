@@ -141,16 +141,18 @@ function TablePagination(props) {
 }
 
 export default function ProductComponent(props) {
+    // GET PRODUCT STATE
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [rows, setRows] = useState([]);
-    
-    // pagination
+
+    // PAGINATION STATE
     const [nextPage, setNextPage] = useState();
     const [prevPage, setPrevPage] = useState();
 
-    // update product
+    // UPDATE PRODUCT STATE
     const [rowUpdate, setRowUpdate] = useState([]);
+    const [rowIndex, setRowIndex] = useState();
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
     const getProducts = (endPoint) => {
@@ -197,114 +199,150 @@ export default function ProductComponent(props) {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = 0;
 
-    // update product
-    const handleUpdateDialogOpen = (row) => {
+    // UPDATE PRODUCT HANDLERS
+    const handleUpdateDialogOpen = (row, index) => {
+        setRowIndex(index);
+        setRowUpdate(row);
         setRowUpdate(row);
         setUpdateDialogOpen(true);
     };
 
     const handleUpdateFormInputChange = (row) => {
         setRowUpdate(row);
-    };    
+    };
 
     const handleUpdateFormSubmit = (row) => {
-        // TODO update rows in table
-    };    
+        const updatedRows = rows.map((r, i) => {
+          if (i === rowIndex) {
+            // return updated row
+            return row;
+          } else {
+            // The rest haven't changed
+            return r;
+          }
+        });
+        setRows(updatedRows);
+      }
 
     const handleUpdateDialogClose = () => {
         setUpdateDialogOpen(false);
     };
 
+    // DELETE PRODUCT HANDLER
 
-    return (
-        <>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={4}>
-                    <Grid item xs={12} md={8} lg={12}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 'flex',
-                                width: 'flex',
-                            }}
-                        >
-                            <EnhancedTableToolbar />
+    const handleUpdateTableOnDeleteRow = (row, index) => {
+        const newRows = rows.map(a => Object.assign({}, a));
+        newRows.splice(index, 1);
+        setRows(newRows);
+      }
+          
+    const handleDeleteRow = (row, index) => {
+        props.showBackdrop(true);
+        axios.delete(`/product/${row.id}/`)
+            .then(function (response) {
+                // handle success
+                handleUpdateTableOnDeleteRow(row, index);
+                props.showBackdrop(false);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+};
 
-                            <TableContainer>
-                                <Table
-                                    sx={{ minWidth: 750 }}
-                                    aria-labelledby="tableTitle"
-                                    size={'medium'}
-                                >
-                                    <EnhancedTableHead
-                                        order={order}
-                                        orderBy={orderBy}
-                                        onRequestSort={handleRequestSort}
-                                    />
-                                    <TableBody>
-                                        {rows.sort(getComparator(order, orderBy)).slice()
-                                            .map((row, index) => {
-                                                const labelId = `enhanced-table-checkbox-${index}`;
 
-                                                return (
-                                                    <TableRow key={row.name}>
-                                                        <TableCell
-                                                            id={labelId}
-                                                            // scope="row"
-                                                            padding="none"
-                                                        >
-                                                            {row.name}
-                                                        </TableCell>
-                                                        <TableCell align="left">{row.mode_type}</TableCell>
-                                                        <TableCell align="left">{row.pricing_type}</TableCell>
-                                                        <TableCell align="left">{row.pricing_unit}</TableCell>
-                                                        <TableCell align="left">{row.pricing_amount}</TableCell>
-                                                        <TableCell align="center">...</TableCell>
-                                                        <TableCell align="left">{row.metro_area}</TableCell>
-                                                        <TableCell align="left">{row.transaction_name}</TableCell>
-                                                        <TableCell align="left">{row.discount_amount}</TableCell>
-                                                        <TableCell align="center">...</TableCell>
-                                                        <TableCell align="left">
-                                                            <ToggleButtonGroup size='small'>
-                                                                <ToggleButton onClick={() => handleUpdateDialogOpen(row)} value="left" aria-label="left aligned">
-                                                                    <ModeEditIcon fontSize='small' />
-                                                                </ToggleButton>
-                                                                <ToggleButton  value="center" aria-label="centered">
-                                                                    <DeleteIcon fontSize='small' />
-                                                                </ToggleButton>
-                                                            </ToggleButtonGroup>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                );
-                                            })}
-                                        {emptyRows > 0 && (
-                                            <TableRow
-                                                style={{
-                                                    height: (53) * emptyRows,
-                                                }}
-                                            >
-                                                <TableCell colSpan={6} />
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <TablePagination nextPage={nextPage} prevPage={prevPage} handleNextClick={handleNextClick} handlePrevClick={handlePrevClick} />
-                        </Paper>
-                    </Grid>
+return (
+    <>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Grid container spacing={4}>
+                <Grid item xs={12} md={8} lg={12}>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            height: 'flex',
+                            width: 'flex',
+                        }}
+                    >
+                        <EnhancedTableToolbar />
+
+                        <TableContainer>
+                            <Table
+                                sx={{ minWidth: 750 }}
+                                aria-labelledby="tableTitle"
+                                size={'medium'}
+                            >
+                                <EnhancedTableHead
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onRequestSort={handleRequestSort}
+                                />
+                                <TableBody>
+                                    {rows.sort(getComparator(order, orderBy)).slice()
+                                        .map((row, index) => {
+                                            const labelId = `enhanced-table-checkbox-${index}`;
+
+                                            return (
+                                                <TableRow key={row.name}>
+                                                    <TableCell
+                                                        id={labelId}
+                                                        // scope="row"
+                                                        padding="none"
+                                                    >
+                                                        {row.name}
+                                                    </TableCell>
+                                                    <TableCell align="left">{row.mode_type}</TableCell>
+                                                    <TableCell align="left">{row.pricing_type}</TableCell>
+                                                    <TableCell align="left">{row.pricing_unit}</TableCell>
+                                                    <TableCell align="left">{row.pricing_amount}</TableCell>
+                                                    <TableCell align="center">...</TableCell>
+                                                    <TableCell align="left">{row.metro_area}</TableCell>
+                                                    <TableCell align="left">{row.transaction_name}</TableCell>
+                                                    <TableCell align="left">{row.discount_amount}</TableCell>
+                                                    <TableCell align="center">...</TableCell>
+                                                    <TableCell align="left">
+                                                        <ToggleButtonGroup size='small'>
+                                                            <ToggleButton onClick={() => handleUpdateDialogOpen(row, index)} value="left" aria-label="left aligned">
+                                                                <ModeEditIcon fontSize='small' />
+                                                            </ToggleButton>
+                                                            <ToggleButton onClick={() => handleDeleteRow(row)} value="center" aria-label="centered">
+                                                                <DeleteIcon fontSize='small' />
+                                                            </ToggleButton>
+                                                        </ToggleButtonGroup>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (53) * emptyRows,
+                                            }}
+                                        >
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination nextPage={nextPage} prevPage={prevPage} handleNextClick={handleNextClick} handlePrevClick={handlePrevClick} />
+                    </Paper>
                 </Grid>
-            </Container>
-            <UpdateProduct
-                updateDialogOpen={updateDialogOpen}
-                handleUpdateDialogClose={handleUpdateDialogClose}
-                handleUpdateFormSubmit={handleUpdateFormSubmit}
-                handleUpdateFormInputChange={handleUpdateFormInputChange}
-                rowUpdate={rowUpdate}
-                showBackdrop={props.showBackdrop}
-                showAlert={props.showAlert}>
-            </UpdateProduct>
-        </>
-    );
+            </Grid>
+        </Container>
+        <UpdateProduct
+            updateDialogOpen={updateDialogOpen}
+            handleUpdateDialogClose={handleUpdateDialogClose}
+            handleUpdateFormSubmit={handleUpdateFormSubmit}
+            handleUpdateFormInputChange={handleUpdateFormInputChange}
+            rowUpdate={rowUpdate}
+            showBackdrop={props.showBackdrop}
+            showAlert={props.showAlert}>
+        </UpdateProduct>
+    </>
+);
 }

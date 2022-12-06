@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Box from '@mui/material/Box';
 import DialogActions from '@mui/material/DialogActions';
@@ -20,6 +19,7 @@ export default function UpdateProduct(props) {
         axios.patch(`/product/${props.rowUpdate.id}/`, props.rowUpdate)
             .then(function (response) {
                 // TODO update rows in table
+                props.handleUpdateFormSubmit(props.rowUpdate);
                 props.handleUpdateDialogClose();
                 props.showBackdrop(false);
                 props.showAlert();
@@ -30,7 +30,6 @@ export default function UpdateProduct(props) {
     };
 
     const handleInputChange = (event) => {
-        console.log('calling input change');
         const value = event.target.value;
         const name = event.target.name;
         props.handleUpdateFormInputChange({ ...props.rowUpdate, [name]: value });
