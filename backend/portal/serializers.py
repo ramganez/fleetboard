@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from portal.models import Provider, Product, Transaction, Flag
+from portal.models import Provider, Product, Transaction
 from portal.config import *
 
 
@@ -23,3 +23,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_type(self, obj):
         return 'PRODUCT'
+
+class TransactionSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name')
+
+    class Meta:
+        model = Transaction
+        fields = "__all__"

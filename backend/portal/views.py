@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from portal.models import Provider, Product
-from portal.serializers import ProviderSerializer, ProductSerializer
+from portal.models import Provider, Product, Transaction
+from portal.serializers import ProviderSerializer, ProductSerializer, TransactionSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, status
@@ -80,3 +80,15 @@ class ProductDetail(APIView):
         product = self.get_object(pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class TransactionList(generics.ListCreateAPIView):
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the products for
+        the provider as determined by the merchant_network_id.
+        """
+        merchant_network_id = self.kwargs["merchant_network_id"]
+        return Transaction.objects.filter(provider__merchant_network_id=merchant_network_id)
+

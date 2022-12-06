@@ -46,13 +46,7 @@ class Transaction(models.Model):
     discount_percentage = models.IntegerField(null=True)
     product = models.ForeignKey('Product', related_name='transactions', on_delete=models.CASCADE)
     provider = models.ForeignKey('Provider', on_delete=models.CASCADE)
+    flag = models.CharField(max_length=200, null=True)
 
-class Flag(models.Model):
-    """ Transaction flag
-    """
-    transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE)
-    provider = models.ForeignKey('Provider', on_delete=models.CASCADE)
-    flag = models.CharField(max_length=200)
-    
-    class meta:
-        unique_together = ['transaction', 'provider']
+    class Meta:
+        ordering = ['created_at']
