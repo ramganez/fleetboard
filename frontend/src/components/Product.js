@@ -157,7 +157,6 @@ export default function ProductComponent(props) {
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
     // NEW PRODUCT STATE
-    const [rowAdd, setRowrowAdd] = useState({});
     const [addDialogOpen, setAddDialogOpen] = useState(false);
 
     const getProducts = (endPoint) => {
