@@ -6,5 +6,6 @@ urlpatterns = [
     path('products/<str:merchant_network_id>/', views.ProductList.as_view()),
     path('product/<int:pk>/', views.ProductDetail.as_view()),
     path('transactions/<str:merchant_network_id>/', views.TransactionList.as_view()),
+    path('transactions/<str:merchant_network_id>/range/', views.TransactionList.as_view()),
     path("transaction-flag/<int:pk>/", views.TransactionFlagDetail.as_view()),  
 ]

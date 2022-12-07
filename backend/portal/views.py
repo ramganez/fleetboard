@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.http import HttpResponse
+from django.utils.timezone import make_aware
 from portal.models import Provider, Product, Transaction
 from portal.serializers import (
     ProviderSerializer,
@@ -92,14 +94,23 @@ class TransactionList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """
-        This view should return a list of all the products for
-        the provider as determined by the merchant_network_id.
+        This view should return a list of all the txns for
+        the provider as determined by the merchant_network_id and filter with date range.
         """
         merchant_network_id = self.kwargs["merchant_network_id"]
+    
+        # filter merchant txn with date range
+        if self.request.query_params.get('start'):
+            start_date = datetime.strptime(self.request.query_params["start"], "%Y-%m-%d") # #'2022-10-07
+            end_date = datetime.strptime(self.request.query_params["end"], "%Y-%m-%d") # #'2022-10-07
+            return Transaction.objects.filter(
+                provider__merchant_network_id=merchant_network_id
+            ).filter(created_at__range=(make_aware(start_date), make_aware(end_date)))
+
+        # return all txn list for the merchant
         return Transaction.objects.filter(
             provider__merchant_network_id=merchant_network_id
         )
-
 
 class TransactionFlagDetail(APIView):
     """

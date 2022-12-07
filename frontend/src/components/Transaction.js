@@ -98,7 +98,7 @@ function EnhancedTableToolbar(props) {
                 Transactions
             </Typography>
 
-            <Tooltip onClick={props.handleFilterDialogOpen} title="Filter">
+            <Tooltip onClick={props.handleFilterDialogOpen} title="Filter by Date">
                 <IconButton>
                     <FilterListIcon fontSize='large' />
                 </IconButton>
@@ -143,12 +143,14 @@ function TablePagination(props) {
 }
 
 export default function TransactionComponent(props) {
-    // GET TRANSACTION STATE
+    // TRANSACTIONS STATE
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [rows, setRows] = useState([]);
     const [flagInput, setFlagInput] = useState({});
+    const [filterInput, setFilterInput] = useState({});
     const [flagDialogOpen, setFlagDialogOpen] = useState(false);
+    const [filterDialogOpen, setFilterDialogOpen] = useState(false);
 
     // PAGINATION STATE
     const [nextPage, setNextPage] = useState();
@@ -230,7 +232,7 @@ export default function TransactionComponent(props) {
 
     const handleFlagDialogOpen = (row, index) => {
         setFlagDialogOpen(true);
-        setFlagInput({ ...flagInput, 'id': row.id, 'index': index});
+        setFlagInput({ ...flagInput, 'id': row.id, 'index': index });
     };
 
     const handleFlagDialogClose = () => {
@@ -243,9 +245,35 @@ export default function TransactionComponent(props) {
         console.log(flagInput);
     }
 
-    // FILTER 
-    const handleFilterDialogOpen = () => {
+    // DATE RANGE FILTER  
+    const handleFilterSubmit = (event) => {
+        event.preventDefault();
+        props.showBackdrop(true);
+        const filterURL = `/transactions/${props.merchantId}/range/?start=${filterInput.start}&end=${filterInput.end}`
+        axios.get(filterURL)
+            .then(function (response) {
+                handleFilterDialogClose();
+                props.showBackdrop(false);
+                props.showAlert();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
+    const handleFilterDialogOpen = () => {
+        setFilterDialogOpen(true);
+    };
+
+    const handleFilterDialogClose = () => {
+        setFilterDialogOpen(false);
+    };
+
+    const handleFilterInputChange = (event) => {
+        const value = event.target.value;
+        const name = event.target.name;
+        setFilterInput({ ...filterInput, [name]: value });
+        console.log(filterInput);
     }
 
     return (
@@ -319,6 +347,7 @@ export default function TransactionComponent(props) {
                 </Grid>
             </Container>
 
+            {/* ADD FLAG */}
             <Dialog open={flagDialogOpen}>
                 <form onSubmit={handleFlagSubmit}>
                     <DialogTitle id="responsive-dialog-title">
@@ -352,6 +381,51 @@ export default function TransactionComponent(props) {
                             style={{ 'color': '#646464', 'borderColor': '#646464', 'backgroundColor': 'transparent' }}
                         >
                             Save
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+
+            {/* DATE RANGE FILTER */}
+            <Dialog open={filterDialogOpen}>
+                <form onSubmit={handleFilterSubmit}>
+                    <DialogTitle id="responsive-dialog-title">
+                        Filter by Date
+                    </DialogTitle>
+                    <DialogContent>
+                        <Box component="span" sx={{
+                            '& .MuiTextField-root': { m: 1, width: '28ch' },
+                        }}>
+                            <div>
+                                <TextField
+                                    onChange={handleFilterInputChange}
+                                    value={filterInput.start}
+                                    name="start"
+                                    label="Start Date"
+                                    required={true} helperText="Ex: 2022-05-02" />
+                                <TextField
+                                    onChange={handleFilterInputChange}
+                                    value={filterInput.end}
+                                    name="end"
+                                    label="End Date"
+                                    required={true} helperText="Ex: 2022-05-15" />
+                            </div>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleFilterDialogClose}
+                            style={{ 'color': '#646464', 'borderColor': '#646464', 'backgroundColor': 'transparent' }}
+                        >
+                            Cancle
+                        </Button>
+                        <Button
+                            type="submit"
+                            value="Submit"
+                            autoFocus={true}
+                            style={{ 'color': '#646464', 'borderColor': '#646464', 'backgroundColor': 'transparent' }}
+                        >
+                            Fitler
                         </Button>
                     </DialogActions>
                 </form>
