@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from portal.models import Provider, Product, Transaction
 from portal.config import *
 
@@ -12,7 +13,8 @@ class ProviderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_type(self, obj):
-        return 'PROFILE'
+        return "PROFILE"
+
 
 class ProductSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
@@ -22,11 +24,14 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_type(self, obj):
-        return 'PRODUCT'
+        return "PRODUCT"
+
 
 class TransactionSerializer(serializers.ModelSerializer):
-    product_name = serializers.CharField(source='product.name')
-    created_at = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S", required=False, read_only=True)
+    product_name = serializers.CharField(source="product.name")
+    created_at = serializers.DateTimeField(
+        format="%d-%m-%Y %H:%M:%S", required=False, read_only=True
+    )
 
     class Meta:
         model = Transaction

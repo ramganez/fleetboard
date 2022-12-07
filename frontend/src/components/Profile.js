@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { FIELDS } from '../config/formConfig'
 import axios from '../config/axisConfig';
@@ -42,7 +42,7 @@ function EnhancedToolbar(props) {
 
             <Tooltip onClick={props.handleDialogOpen} title="Update Information">
                 <IconButton>
-                    <AddIcon fontSize='large' />
+                    <EditIcon fontSize='large' />
                 </IconButton>
             </Tooltip>
         </Toolbar>

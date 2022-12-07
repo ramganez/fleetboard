@@ -1,15 +1,18 @@
 from datetime import datetime
 from django.http import HttpResponse
 from django.utils.timezone import make_aware
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import generics, status
+
 from portal.models import Provider, Product, Transaction
 from portal.serializers import (
     ProviderSerializer,
     ProductSerializer,
     TransactionSerializer,
 )
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import generics, status
+from portal.utils import get_chart_data
 
 
 class ProviderDetail(APIView):
@@ -25,7 +28,12 @@ class ProviderDetail(APIView):
         try:
             provider = self.get_object(merchant_network_id)
             serializer = ProviderSerializer(provider)
-            return Response(serializer.data)
+            
+            # to update the response data with chart data 
+            updated_data = {'chart_data': get_chart_data(provider)}
+            updated_data.update(serializer.data)
+
+            return Response(updated_data)
         except Provider.DoesNotExist:
             return HttpResponse(status=404)
 

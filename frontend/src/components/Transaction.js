@@ -27,11 +27,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
 import axios from '../config/axisConfig';
 
 import { getComparator } from '../utils/commonUtils'
 import { transactionColumns } from '../config/tableConfig'
+
+import BarChart from './BarChart';
 
 
 function EnhancedTableHead(props) {
@@ -81,7 +84,7 @@ function EnhancedTableToolbar(props) {
     return (
         <Toolbar
             sx={{
-                pl: { sm: 2 },
+                pl: { sm: 1 },
                 pr: { xs: 1, sm: 1 },
                 ...({
                     bgcolor: (theme) =>
@@ -95,14 +98,15 @@ function EnhancedTableToolbar(props) {
                 id="tableTitle"
                 component="div"
             >
-                Transactions
+                {props.title}
             </Typography>
 
-            <Tooltip onClick={props.handleFilterDialogOpen} title="Filter by Date">
+            {props.handleFilterDialogOpen && <Tooltip onClick={props.handleFilterDialogOpen} title="Filter by Date">
                 <IconButton>
                     <FilterListIcon fontSize='large' />
                 </IconButton>
             </Tooltip>
+            }   
         </Toolbar>
     );
 }
@@ -242,7 +246,6 @@ export default function TransactionComponent(props) {
     const handleFlagInputChange = (event) => {
         const value = event.target.value;
         setFlagInput({ ...flagInput, 'flag': value });
-        console.log(flagInput);
     }
 
     // DATE RANGE FILTER  
@@ -254,7 +257,7 @@ export default function TransactionComponent(props) {
             .then(function (response) {
                 setRows(response.data.results);
                 setNextPage(response.data.next);
-                setPrevPage(response.data.previous);                
+                setPrevPage(response.data.previous);
                 handleFilterDialogClose();
                 props.showBackdrop(false);
                 props.showAlert();
@@ -276,7 +279,6 @@ export default function TransactionComponent(props) {
         const value = event.target.value;
         const name = event.target.name;
         setFilterInput({ ...filterInput, [name]: value });
-        console.log(filterInput);
     }
 
     return (
@@ -293,7 +295,7 @@ export default function TransactionComponent(props) {
                                 width: 'flex',
                             }}
                         >
-                            <EnhancedTableToolbar handleFilterDialogOpen={handleFilterDialogOpen} />
+                            <EnhancedTableToolbar title='Transactions' handleFilterDialogOpen={handleFilterDialogOpen} />
 
                             <TableContainer>
                                 <Table
@@ -345,6 +347,19 @@ export default function TransactionComponent(props) {
                                 </Table>
                             </TableContainer>
                             <TablePagination nextPage={nextPage} prevPage={prevPage} handleNextClick={handleNextClick} handlePrevClick={handlePrevClick} />
+                        </Paper>
+                        <Divider/>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 'flex',
+                                width: 'flex',
+                            }}
+                        >
+                            <EnhancedTableToolbar title='Monthly Transaction' />
+                            <BarChart chartData={props.chartData} />
                         </Paper>
                     </Grid>
                 </Grid>

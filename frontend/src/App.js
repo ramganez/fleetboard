@@ -19,15 +19,19 @@ import Profile from './components/Profile';
 import axios from '../src/config/axisConfig';
 
 function App() {
-  // global merchant_id state 
+  // state - global merchant details  
   const [merchantId, setMerchantId] = useState();
   const [merchantPk, setMerchantPk] = useState();
-  // state for controling global menu navigation 
+
+  // state - controling global menu navigation 
   const [selectedMenu, setSelectedMenu] = useState(0);
-  // state for controling global backdrop 
+  // state - controling global backdrop 
   const [backdrop, setBackdrop] = useState(true);
-  // state for controling global alert 
+  // state - controling global alert 
   const [alert, setAlert] = useState(false);
+
+  // state - chart data
+  const [chartData, setChartData] = useState([]);
 
   // state for login dialog 
   const [input, setInput] = useState();
@@ -40,6 +44,7 @@ function App() {
       .then(function (response) {
         setMerchantId(response.data.merchant_network_id);
         setMerchantPk(response.data.id);
+        setChartData(response.data.chart_data);
         setLoginDialogOpen(false);
         showBackdrop(false);
         showAlert();
@@ -90,7 +95,7 @@ function App() {
           >
             <CircularProgress color="inherit" />
           </Backdrop>
-          {merchantId && selectedMenu === 0 && <Transaction merchantId={merchantId} showBackdrop={showBackdrop} showAlert={showAlert} />}
+          {merchantId && selectedMenu === 0 && <Transaction merchantId={merchantId} chartData={chartData} showBackdrop={showBackdrop} showAlert={showAlert} />}
           {merchantId && selectedMenu === 1 && <Product merchantId={merchantId} merchantPk={merchantPk} showBackdrop={showBackdrop} showAlert={showAlert} />}
           {merchantId && selectedMenu === 2 && <Profile merchantId={merchantId} showBackdrop={showBackdrop} showAlert={showAlert} />}
         </Box>

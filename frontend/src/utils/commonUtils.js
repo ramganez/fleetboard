@@ -12,6 +12,7 @@ const INSTANCE_TYPE = {
         'provider_support',
         'merchant_category',
         'merchant_network_id',
+        'chart_data',
     ],
     PRODUCT: [
         'id',
@@ -46,9 +47,6 @@ export const transformResponse = (data) => {
 }
 
 function descendingComparator(a, b, orderBy) {
-    if (orderBy === 'flag') {
-        console.log(a[orderBy], b[orderBy]);
-    }
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
