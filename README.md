@@ -8,7 +8,7 @@ $ git clone https://github.com/ramganez/fleetboard.git
 $ cd fleetboard
 $ virtualenv venv # create virtualenv with python v - Python 3.8.10
 $ source venv/bin/activate
-$ pip install -r requirements.txt
+$ pip install -r backend/requirements.txt
 $ python backend/manage.py migrate
 ```
 ### Frontend build
@@ -30,4 +30,4 @@ $ python backend/manage.py runserver localhost:8000
 $ cd frontend
 $ npm start
 ```
-and then browse to http://localhost:3000.
+and then browse to http://localhost:3000 use Merchant-ID - 'YVTE9ROHBUDVIB8' to login.
