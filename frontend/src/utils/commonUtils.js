@@ -46,6 +46,9 @@ export const transformResponse = (data) => {
 }
 
 function descendingComparator(a, b, orderBy) {
+    if (orderBy === 'flag') {
+        console.log(a[orderBy], b[orderBy]);
+    }
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
@@ -56,7 +59,9 @@ function descendingComparator(a, b, orderBy) {
 }
 
 export const getComparator = (order, orderBy) => {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+    if (order === 'desc') {
+        return (a, b) => descendingComparator(a, b, orderBy)
+    } else {
+        return (a, b) => -descendingComparator(a, b, orderBy);
+    }
 }

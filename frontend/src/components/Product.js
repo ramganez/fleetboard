@@ -46,7 +46,7 @@ function EnhancedTableHead(props) {
                 {productColumns.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={'left'}
+                        align={'center'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >

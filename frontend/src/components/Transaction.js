@@ -47,7 +47,7 @@ function EnhancedTableHead(props) {
                 {transactionColumns.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={'left'}
+                        align={'center'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -252,6 +252,9 @@ export default function TransactionComponent(props) {
         const filterURL = `/transactions/${props.merchantId}/range/?start=${filterInput.start}&end=${filterInput.end}`
         axios.get(filterURL)
             .then(function (response) {
+                setRows(response.data.results);
+                setNextPage(response.data.next);
+                setPrevPage(response.data.previous);                
                 handleFilterDialogClose();
                 props.showBackdrop(false);
                 props.showAlert();
@@ -324,7 +327,7 @@ export default function TransactionComponent(props) {
                                                         <TableCell align="left">{row.product_name}</TableCell>
 
                                                         <TableCell align="left">
-                                                            {!row.flag ? <Link onClick={() => handleFlagDialogOpen(row, index)} underline="hover"> SET FLAG </Link> : 'FLAGGED'}
+                                                            {row.flag === '0' ? <Link onClick={() => handleFlagDialogOpen(row, index)} underline="hover"> SET FLAG </Link> : 'FLAGGED'}
                                                         </TableCell>
                                                     </TableRow>
                                                 );
