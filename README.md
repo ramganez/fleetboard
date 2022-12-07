@@ -22,8 +22,7 @@ $ npm install
 
 To examine the demos in your local build, execute below commands to setup the dummy data:
 ```
-$ cd ../fleetboard
-$ source venv/bin/activate
+$ cd ../
 $ python backend/manage.py shell < backend/portal/dev_data_setup.py 
 $ python backend/manage.py runserver localhost:8000 
 
